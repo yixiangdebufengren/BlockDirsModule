@@ -40,21 +40,31 @@ jobs:
       - name: Build release APK
         run: gradle assembleRelease --no-daemon
 
-      # 固定 tag 为 VersionCode-VersionName 格式（官方仓库要求）
-      # 先删除已存在的同名 tag/release，再重建，保证 Releases 页只有一个最新版
+      # 从 build.gradle 读取 versionCode / versionName，拼成官方 tag 格式 [code]-[name]
+      - name: Read version
+        id: version
+        run: |
+          VC=$(grep -oP 'versionCode\s+\K[0-9]+' app/build.gradle | head -1)
+          VN=$(grep -oP 'versionName\s+"\K[^"]+' app/build.gradle | head -1)
+          TAG="${VC}-${VN}"
+          echo "vc=$VC" >> "$GITHUB_OUTPUT"
+          echo "vn=$VN" >> "$GITHUB_OUTPUT"
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "Version: code=$VC name=$VN tag=$TAG"
+
       - name: Remove old tag & release
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-          if git rev-parse "1-1.0" >/dev/null 2>&1; then
-            git push origin :refs/tags/1-1.0 || true
+          if git rev-parse "${{ steps.version.outputs.tag }}" >/dev/null 2>&1; then
+            git push origin :refs/tags/${{ steps.version.outputs.tag }} || true
           fi
 
       - name: Publish GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: 1-1.0
-          name: BlockDirs v1.0
+          tag_name: ${{ steps.version.outputs.tag }}
+          name: BlockDirs v${{ steps.version.outputs.vn }}
           files: app/build/outputs/apk/release/*.apk
           body: |
             阻止外置存储（OTG U 盘 / SD 卡）自动创建 Android、Music、Pictures、DCIM、Movies 等标准目录的 LSPosed 模块。
@@ -67,3 +77,69 @@ jobs:
           draft: false
           prerelease: false
           fail_on_unmatched_files: true
+
+  # 上传到官方镜像仓库 Xposed-Modules-Repo/top.yixiangren.blockdirs
+  publish-mirror:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Read version
+        id: version
+        run: |
+          VC=$(grep -oP 'versionCode\s+\K[0-9]+' app/build.gradle | head -1)
+          VN=$(grep -oP 'versionName\s+"\K[^"]+' app/build.gradle | head -1)
+          echo "tag=${VC}-${VN}" >> "$GITHUB_OUTPUT"
+          echo "name=${VN}" >> "$GITHUB_OUTPUT"
+
+      - name: Download APK from source release
+        run: |
+          TAG="${{ steps.version.outputs.tag }}"
+          curl -sL -o app-release.apk \
+            "https://github.com/yixiangdebufengren/top.yixiangren.blockdirs/releases/download/${TAG}/app-release.apk"
+          ls -la app-release.apk
+
+      - name: Publish release to LSPosed mirror repo
+        env:
+          TOKEN: ${{ secrets.MIRROR_TOKEN }}
+        run: |
+          set -e
+          REPO="Xposed-Modules-Repo/top.yixiangren.blockdirs"
+          TAG="${{ steps.version.outputs.tag }}"
+          VER="BlockDirs v${{ steps.version.outputs.name }}"
+          BODY="阻止外置存储（OTG U 盘 / SD 卡）自动创建 Android、Music、Pictures、DCIM、Movies 等标准目录的 LSPosed 模块。"
+
+          # 1) 删除旧 tag 和旧 release（保证只有一个最新版）
+          curl -s -X DELETE -H "Authorization: token $TOKEN" \
+            "https://api.github.com/repos/$REPO/git/refs/tags/$TAG" || true
+          for rid in $(curl -s -H "Authorization: token $TOKEN" \
+            "https://api.github.com/repos/$REPO/releases" | jq -r '.[].id' 2>/dev/null); do
+            curl -s -X DELETE -H "Authorization: token $TOKEN" \
+              "https://api.github.com/repos/$REPO/releases/$rid" || true
+          done
+
+          # 2) 创建 tag 指向 main
+          MAIN_SHA=$(curl -s -H "Authorization: token $TOKEN" \
+            "https://api.github.com/repos/$REPO/git/refs/heads/main" | jq -r '.object.sha')
+          TAG_SHA=$(curl -s -X POST -H "Authorization: token $TOKEN" \
+            -d "{\"tag\":\"$TAG\",\"message\":\"$VER\",\"object\":\"$MAIN_SHA\",\"type\":\"commit\"}" \
+            "https://api.github.com/repos/$REPO/git/tags" | jq -r '.sha')
+          test -n "$TAG_SHA" && test "$TAG_SHA" != "null"
+          curl -s -X POST -H "Authorization: token $TOKEN" \
+            -d "{\"ref\":\"refs/tags/$TAG\",\"sha\":\"$TAG_SHA\"}" \
+            "https://api.github.com/repos/$REPO/git/refs" >/dev/null
+
+          # 3) 创建 release
+          UPLOAD_URL=$(curl -s -X POST -H "Authorization: token $TOKEN" \
+            -d "{\"tag_name\":\"$TAG\",\"name\":\"$VER\",\"body\":\"$BODY\",\"draft\":false,\"prerelease\":false}" \
+            "https://api.github.com/repos/$REPO/releases" | jq -r '.upload_url')
+          UPLOAD_URL="${UPLOAD_URL%\{*}?name=app-release.apk"
+
+          # 4) 上传 APK
+          curl -s -X POST -H "Authorization: token $TOKEN" \
+            -H "Content-Type: application/vnd.android.package-archive" \
+            --data-binary "@app-release.apk" "$UPLOAD_URL" >/dev/null
+
+          echo "镜像仓库 release 发布完成，官方 bot 将在 5 分钟内上架。"
