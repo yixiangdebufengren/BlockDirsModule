@@ -116,6 +116,14 @@
             android:textColor="#8E8E93"
             android:textSize="13sp" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="个人博客：yixiangren.top"
+            android:textColor="#0A84FF"
+            android:textSize="13sp" />
+
         <!-- 底部版权（版本号动态填充） -->
         <TextView
             android:id="@+id/version_footer"
