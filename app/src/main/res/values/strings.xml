@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">BlockDirs</string>
+    <string name="usage_tip">使用提醒：请在 LSPosed 中勾选本模块，作用域选择「系统框架」与「com.android.providers.media.module」，重启手机后生效。</string>
+    <!-- 版本号占位，运行时会用 versionName 替换 {version} -->
+    <string name="version_footer">BlockDirs v{version} — LSPosed 模块</string>
+</resources>

@@ -38,13 +38,13 @@ Android 的 MediaProvider（`com.android.providers.media.module`，UID `10176`�
 
 ### GitHub Actions
 
-仓库已配置 `build.yml`，push 后会自动构建 `arm64-v8a` 的 Debug APK。
+仓库已配置 `build.yml`，push 后会自动构建 `arm64-v8a` 的 Release APK（release 复用 debug 签名，便于覆盖安装）。
 
 ### 本地构建
 
 ```bash
-./gradlew assembleDebug
-# 产物：app/build/outputs/apk/debug/app-debug.apk
+./gradlew assembleRelease
+# 产物：app/build/outputs/apk/release/app-release.apk
 ```
 
 环境：AGP 8.2.0、Gradle 8.6、JDK 17、NDK 27.2.12479018、CMake 4.0.2（native 以 CMake 构建）。
@@ -54,7 +54,7 @@ Android 的 MediaProvider（`com.android.providers.media.module`，UID `10176`�
 ## 安装与启用
 
 1. 安装构建出的 APK。
-2. 打开 LSPosed，勾选模块，作用域选择：
+2. 打开 LSPosed，勾选模块（模块已内置作用域推荐，会自动预选 MediaProvider），作用域选择：
    - **系统框架**
    - **com.android.providers.media.module**（MediaProvider）
 3. 重启手机（或软重启使 zygote 注入生效）。

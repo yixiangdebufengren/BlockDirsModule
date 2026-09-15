@@ -15,7 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:text="BlockDirs"
+            android:text="@string/app_name"
             android:textColor="#FFFFFF"
             android:textSize="32sp"
             android:textStyle="bold" />
@@ -27,6 +27,34 @@
             android:text="阻止外置存储自动创建目录"
             android:textColor="#8E8E93"
             android:textSize="15sp" />
+
+        <!-- 分隔线 -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="24dp"
+            android:background="#3A3A3C" />
+
+        <!-- 使用提醒 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="使用提醒"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:lineSpacingExtra="4dp"
+            android:padding="14dp"
+            android:background="#2C2C2E"
+            android:text="@string/usage_tip"
+            android:textColor="#0A84FF"
+            android:textSize="14sp" />
 
         <!-- 分隔线 -->
         <View
@@ -88,13 +116,14 @@
             android:textColor="#8E8E93"
             android:textSize="13sp" />
 
-        <!-- 底部版权 -->
+        <!-- 底部版权（版本号动态填充） -->
         <TextView
+            android:id="@+id/version_footer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="48dp"
             android:gravity="center"
-            android:text="BlockDirs v1.0 — LSPosed 模块"
+            android:text="@string/version_footer"
             android:textColor="#5A5A5E"
             android:textSize="12sp" />
 

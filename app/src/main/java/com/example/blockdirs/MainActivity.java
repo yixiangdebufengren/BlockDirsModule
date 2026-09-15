@@ -1,7 +1,10 @@
 package com.example.blockdirs;
 
 import android.app.Activity;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.widget.TextView;
 
 /**
  * BlockDirs 模块的主界面（作者署名页）。
@@ -15,5 +18,22 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // 动态显示版本号
+        TextView footer = findViewById(R.id.version_footer);
+        if (footer != null) {
+            String version = getVersionName();
+            String text = getString(R.string.version_footer).replace("{version}", version);
+            footer.setText(text);
+        }
+    }
+
+    private String getVersionName() {
+        try {
+            PackageInfo pi = getPackageManager().getPackageInfo(getPackageName(), 0);
+            return pi.versionName != null ? pi.versionName : "1.0";
+        } catch (PackageManager.NameNotFoundException e) {
+            return "1.0";
+        }
     }
 }
