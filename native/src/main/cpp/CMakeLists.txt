@@ -13,18 +13,18 @@ FetchContent_Declare(
     GIT_SHALLOW TRUE
 )
 
-# Dobby 需要 clang 编译，关闭它内部可能开启的测试/示例构建
-set(DOBBY_BUILD_TESTS OFF CACHE BOOL "" FORCE)
-set(DOBBY_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+# 关闭 Dobby 内部的测试/示例构建（正确选项名是单数）
+set(DOBBY_BUILD_TEST OFF CACHE BOOL "" FORCE)
+set(DOBBY_BUILD_EXAMPLE OFF CACHE BOOL "" FORCE)
+# 关闭 SymbolResolver 子插件，避免额外依赖
+set(Plugin.SymbolResolver OFF CACHE BOOL "" FORCE)
 
 FetchContent_MakeAvailable(dobby)
 
 add_library(blockdirs SHARED blockdirs.cpp)
 
-target_include_directories(blockdirs PRIVATE ${dobby_SOURCE_DIR}/include)
-
-find_library(log-lib log)
+# Dobby 的 target 名是 dobby_static（STATIC 库，OUTPUT_NAME 为 dobby）
 target_link_libraries(blockdirs
-    dobby
-    ${log-lib}
+    dobby_static
+    log
     dl)

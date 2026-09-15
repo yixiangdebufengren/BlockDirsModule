@@ -24,7 +24,7 @@ android {
     externalNativeBuild {
         cmake {
             path 'src/main/cpp/CMakeLists.txt'
-            version '3.22.1'
+            // 不指定 version，使用 AGP 默认的 CMake 版本（自动下载）
         }
     }
 
