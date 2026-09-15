@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="color_bg">#F6FBF2</color>
+    <color name="color_card">#EBEFE7</color>
+    <color name="color_text_primary">#181D18</color>
+    <color name="color_text_secondary">#414941</color>
+    <color name="color_text_tertiary">#717970</color>
+    <color name="color_divider">#181D18</color>
+    <color name="color_icon">#336940</color>
+</resources>
