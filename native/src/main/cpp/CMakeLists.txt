@@ -17,6 +17,11 @@ FetchContent_Declare(
 
 # 手动 Populate（而非 MakeAvailable），这样可以在 shadowhook 的
 # file(GLOB *.c) 执行之前先禁用 sh_jni.c。
+# CMake 4.0.2 中 FetchContent_Populate 已被弃用（策略 CMP0169），
+# 这里显式允许直接调用它。
+if(POLICY CMP0169)
+    cmake_policy(SET CMP0169 OLD)
+endif()
 FetchContent_Populate(shadowhook)
 
 # 关键修复：libshadowhook.so 导出 JNI_OnLoad，内部会 FindClass("com/bytedance/shadowhook/ShadowHook")，
