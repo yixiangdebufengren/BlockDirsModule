@@ -27,17 +27,15 @@ set(_DOBBY_ASM "${dobby_SOURCE_DIR}/source/TrampolineBridge/ClosureTrampolineBri
 if(EXISTS "${_DOBBY_ASM}")
     file(READ "${_DOBBY_ASM}" _asm_content)
     # 精确替换 Darwin 语法的两行，改为 Android/Linux GNU 语法。
-    # 原文件（经 cdecl 宏展开后）：
-    #   adrp TMP_REG_0, common_closure_bridge_handler@PAGE
-    #   add  TMP_REG_0, TMP_REG_0, common_closure_bridge_handler@PAGEOFF
-    # GNU as 正确写法（:lo12: 在符号前面）：
-    string(REPLACE
-        "cdecl(common_closure_bridge_handler)@PAGE"
-        "cdecl(common_closure_bridge_handler)"
-        _asm_content "${_asm_content}")
+    # 注意：必须先处理 @PAGEOFF（更长的串），再处理 @PAGE，
+    # 否则 @PAGE 会误匹配 @PAGEOFF 的前 5 个字符，残留 "OFF"。
     string(REPLACE
         "cdecl(common_closure_bridge_handler)@PAGEOFF"
         ":lo12:cdecl(common_closure_bridge_handler)"
+        _asm_content "${_asm_content}")
+    string(REPLACE
+        "cdecl(common_closure_bridge_handler)@PAGE"
+        "cdecl(common_closure_bridge_handler)"
         _asm_content "${_asm_content}")
     file(WRITE "${_DOBBY_ASM}" "${_asm_content}")
     message(STATUS "[blockdirs] patched Dobby closure_bridge_arm64.asm for Android GNU as")
