@@ -2,7 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F6FBF2"
+    android:background="@color/color_bg"
     android:fillViewport="true">
 
     <LinearLayout
@@ -13,38 +13,11 @@
         android:paddingHorizontal="16dp"
         android:paddingBottom="24dp">
 
-        <!-- 顶部居中标题栏（复刻 WeKit CenterAlignedTopAppBar） -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center_horizontal"
-            android:paddingVertical="12dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/app_name"
-                android:textColor="#181D18"
-                android:textSize="22sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/title_version"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:textColor="#414941"
-                android:textSize="11sp"
-                android:alpha="0.7" />
-        </LinearLayout>
-
         <!-- 使用说明卡片（点击跳转博客） -->
         <LinearLayout
             android:id="@+id/card_guide"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
             android:orientation="vertical"
             android:padding="16dp"
             android:background="@drawable/card_bg"
@@ -68,7 +41,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:text="@string/module_app_build_info_title"
-                    android:textColor="#181D18"
+                    android:textColor="@color/color_text_primary"
                     android:textSize="16sp"
                     android:textStyle="bold" />
             </LinearLayout>
@@ -79,7 +52,7 @@
                 android:layout_marginTop="12dp"
                 android:lineSpacingExtra="3dp"
                 android:text="@string/usage_tip"
-                android:textColor="#414941"
+                android:textColor="@color/color_text_secondary"
                 android:textSize="13sp" />
         </LinearLayout>
 
@@ -96,7 +69,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/module_app_principle_title"
-                android:textColor="#181D18"
+                android:textColor="@color/color_text_primary"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -106,7 +79,7 @@
                 android:layout_marginTop="8dp"
                 android:lineSpacingExtra="3dp"
                 android:text="@string/module_app_principle_desc"
-                android:textColor="#414941"
+                android:textColor="@color/color_text_secondary"
                 android:textSize="12sp" />
         </LinearLayout>
 
@@ -115,7 +88,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginVertical="16dp"
-            android:background="#181D18"
+            android:background="@color/color_divider"
             android:alpha="0.1" />
 
         <!-- GitHub 链接卡片 -->
@@ -148,7 +121,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/link_github_title"
-                    android:textColor="#181D18"
+                    android:textColor="@color/color_text_primary"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
@@ -156,7 +129,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/link_github_subtitle"
-                    android:textColor="#414941"
+                    android:textColor="@color/color_text_secondary"
                     android:textSize="12sp" />
             </LinearLayout>
         </LinearLayout>
@@ -191,7 +164,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/link_blog_title"
-                    android:textColor="#181D18"
+                    android:textColor="@color/color_text_primary"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
@@ -199,7 +172,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/link_blog_subtitle"
-                    android:textColor="#414941"
+                    android:textColor="@color/color_text_secondary"
                     android:textSize="12sp" />
             </LinearLayout>
         </LinearLayout>
@@ -212,7 +185,7 @@
             android:layout_marginTop="32dp"
             android:gravity="center"
             android:text="@string/version_footer"
-            android:textColor="#717970"
+            android:textColor="@color/color_text_tertiary"
             android:textSize="12sp" />
 
     </LinearLayout>
