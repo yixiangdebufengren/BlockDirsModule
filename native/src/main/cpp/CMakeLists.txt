@@ -18,6 +18,11 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(shadowhook)
 
+# shadowhook 的 CMakeLists 用了 -Weverything -Werror，在 NDK 27 的 clang 下会触发
+# -Wunsafe-buffer-usage / -Wdeclaration-after-statement 等大量告警进而编译失败。
+# 这里追加 -Wno-error 关闭「告警即错误」，只保留真正致命的错误。
+target_compile_options(shadowhook PRIVATE -Wno-error)
+
 add_library(blockdirs SHARED blockdirs.cpp)
 
 target_link_libraries(blockdirs
