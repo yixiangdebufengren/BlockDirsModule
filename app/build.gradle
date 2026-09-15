@@ -18,9 +18,18 @@ android {
         }
     }
 
+    signingConfigs {
+        debug {
+            // release 复用 debug 签名，保证可覆盖安装，无需单独 keystore
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
+            shrinkResources false
+            // 复用 debug 签名：release 与 debug 可互覆盖安装
+            signingConfig signingConfigs.debug
         }
     }
 
