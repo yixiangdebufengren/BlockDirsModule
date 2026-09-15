@@ -26,12 +26,8 @@ public class MainActivity extends Activity {
     }
 
     private void bindVersion() {
-        TextView titleVersion = findViewById(R.id.title_version);
         TextView footer = findViewById(R.id.version_footer);
         String version = getVersionName();
-        if (titleVersion != null) {
-            titleVersion.setText(getString(R.string.module_app_version_summary, version, getVersionCode()));
-        }
         if (footer != null) {
             footer.setText(getString(R.string.version_footer).replace("{version}", version));
         }
