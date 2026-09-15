@@ -6,6 +6,8 @@ android {
     namespace 'com.example.blockdirs'
     compileSdk 34
 
+    ndkVersion '27.2.12479018'
+
     defaultConfig {
         minSdk 30
         targetSdk 34
@@ -24,7 +26,7 @@ android {
     externalNativeBuild {
         cmake {
             path 'src/main/cpp/CMakeLists.txt'
-            // 不指定 version，使用 AGP 默认的 CMake 版本（自动下载）
+            version '4.0.2'
         }
     }
 

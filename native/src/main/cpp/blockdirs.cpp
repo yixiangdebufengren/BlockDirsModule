@@ -7,13 +7,13 @@
 #include <android/log.h>
 #include <sys/stat.h>
 
-#include "dobby.h"
+#include "shadowhook.h"
 
 #define TAG "BlockDirsNative"
 #define LOGI(...) __android_log_print(ANDROID_LOG_INFO, TAG, __VA_ARGS__)
 #define LOGE(...) __android_log_print(ANDROID_LOG_ERROR, TAG, __VA_ARGS__)
 
-// 原始函数指针（由 Dobby 回填）
+// 原始函数指针（由 shadowhook 回填）
 static int (*orig_mkdir)(const char *, mode_t) = nullptr;
 static int (*orig_mkdirat)(int, const char *, mode_t) = nullptr;
 
@@ -78,40 +78,31 @@ static int my_mkdirat(int dirfd, const char *path, mode_t mode) {
     return orig_mkdirat(dirfd, path, mode);
 }
 
-static void *resolve_symbol(const char *lib, const char *name) {
-    void *handle = dlopen(lib, RTLD_NOW | RTLD_GLOBAL);
-    if (handle == nullptr) {
-        LOGE("dlopen %s failed: %s", lib, dlerror());
-        return nullptr;
-    }
-    void *sym = dlsym(handle, name);
-    if (sym == nullptr) {
-        LOGE("dlsym %s@%s failed: %s", name, lib, dlerror());
-    }
-    return sym;
-}
-
 extern "C" JNIEXPORT void JNICALL
 Java_com_example_blockdirs_MainHook_installNativeHook(JNIEnv *env, jclass clazz) {
     LOGI("installNativeHook: block ALL top-level dirs on external volumes");
 
+    // 初始化 shadowhook（默认 inline 模式）
+    if (shadowhook_init(SHADOWHOOK_MODE_UNIQUE, false) != 0) {
+        LOGE("shadowhook_init failed");
+        return;
+    }
+
     // Hook libc 的 mkdir
-    void *mkdir_addr = resolve_symbol("libc.so", "mkdir");
-    if (mkdir_addr != nullptr) {
-        if (DobbyHook(mkdir_addr, (void *)my_mkdir, (void **)&orig_mkdir) == 0) {
-            LOGI("mkdir hooked @ %p", mkdir_addr);
-        } else {
-            LOGE("mkdir hook failed");
-        }
+    void *mkdir_stub = shadowhook_hook_sym_name(
+            "libc.so", "mkdir", (void *)my_mkdir, (void **)&orig_mkdir);
+    if (mkdir_stub != nullptr) {
+        LOGI("mkdir hooked, orig=%p", (void *)orig_mkdir);
+    } else {
+        LOGE("mkdir hook failed");
     }
 
     // Hook libc 的 mkdirat
-    void *mkdirat_addr = resolve_symbol("libc.so", "mkdirat");
-    if (mkdirat_addr != nullptr) {
-        if (DobbyHook(mkdirat_addr, (void *)my_mkdirat, (void **)&orig_mkdirat) == 0) {
-            LOGI("mkdirat hooked @ %p", mkdirat_addr);
-        } else {
-            LOGE("mkdirat hook failed");
-        }
+    void *mkdirat_stub = shadowhook_hook_sym_name(
+            "libc.so", "mkdirat", (void *)my_mkdirat, (void **)&orig_mkdirat);
+    if (mkdirat_stub != nullptr) {
+        LOGI("mkdirat hooked, orig=%p", (void *)orig_mkdirat);
+    } else {
+        LOGE("mkdirat hook failed");
     }
 }
