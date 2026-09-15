@@ -1,9 +1,12 @@
-name: Build APK
+name: Build & Release APK
 
 on:
   push:
     branches: [ main, master ]
   workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -11,6 +14,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
@@ -35,8 +40,24 @@ jobs:
       - name: Build release APK
         run: gradle assembleRelease --no-daemon
 
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
+      - name: Generate tag
+        id: tag
+        run: echo "tag_name=v1.0-$(date +%Y%m%d-%H%M%S)-${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
         with:
-          name: BlockDirs-APK
-          path: app/build/outputs/apk/release/*.apk
+          tag_name: ${{ steps.tag.outputs.tag_name }}
+          name: BlockDirs v1.0 (build ${{ steps.tag.outputs.tag_name }})
+          files: app/build/outputs/apk/release/*.apk
+          body: |
+            阻止外置存储（OTG U 盘 / SD 卡）自动创建 Android、Music、Pictures、DCIM、Movies 等标准目录的 LSPosed 模块。
+
+            ## 使用说明
+            1. 手机需已 Root 并安装 LSPosed；
+            2. 下载下方 app-release.apk 安装；
+            3. 在 LSPosed 勾选 BlockDirs（模块已内置作用域推荐）；
+            4. 重启手机后生效。
+          draft: false
+          prerelease: false
+          fail_on_unmatched_files: true
