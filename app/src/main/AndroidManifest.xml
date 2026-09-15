@@ -5,6 +5,17 @@
     <application
         android:label="BlockDirs"
         android:icon="@android:drawable/sym_def_app_icon">
+
+        <activity
+            android:name=".MainActivity"
+            android:label="BlockDirs"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
         <meta-data
             android:name="xposedmodule"
             android:value="true" />
