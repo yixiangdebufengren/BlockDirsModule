@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.blockdirs'
+    namespace 'top.yixiangren.blockdirs'
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.example.blockdirs"
+        applicationId "top.yixiangren.blockdirs"
         minSdk 30
         targetSdk 34
         versionCode 1

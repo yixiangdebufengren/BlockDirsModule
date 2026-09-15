@@ -40,15 +40,21 @@ jobs:
       - name: Build release APK
         run: gradle assembleRelease --no-daemon
 
-      - name: Generate tag
-        id: tag
-        run: echo "tag_name=v1.0-$(date +%Y%m%d-%H%M%S)-${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
+      # 固定 tag 为 VersionCode-VersionName 格式（官方仓库要求）
+      # 先删除已存在的同名 tag/release，再重建，保证 Releases 页只有一个最新版
+      - name: Remove old tag & release
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          if git rev-parse "1-1.0" >/dev/null 2>&1; then
+            git push origin :refs/tags/1-1.0 || true
+          fi
 
       - name: Publish GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ steps.tag.outputs.tag_name }}
-          name: BlockDirs v1.0 (build ${{ steps.tag.outputs.tag_name }})
+          tag_name: 1-1.0
+          name: BlockDirs v1.0
           files: app/build/outputs/apk/release/*.apk
           body: |
             阻止外置存储（OTG U 盘 / SD 卡）自动创建 Android、Music、Pictures、DCIM、Movies 等标准目录的 LSPosed 模块。

@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace 'com.example.blockdirs'
+    namespace 'top.yixiangren.blockdirs'
     compileSdk 34
 
     ndkVersion '27.2.12479018'

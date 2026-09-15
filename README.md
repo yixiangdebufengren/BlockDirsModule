@@ -70,7 +70,7 @@ Android 的 MediaProvider（`com.android.providers.media.module`，UID `10176`�
 BlockDirsModule/
 ├── app/                 # Android 应用（LSPosed 入口 + 关于页 UI）
 │   └── src/main/
-│       ├── java/com/example/blockdirs/
+│       ├── java/top/yixiangren/blockdirs/
 │       │   ├── MainHook.java      # Xposed 入口（zygote 加载 native + 注入 hook）
 │       │   └── MainActivity.java  # 关于页 UI
 │       └── res/layout/activity_main.xml

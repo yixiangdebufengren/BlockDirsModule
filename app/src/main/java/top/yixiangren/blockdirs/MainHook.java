@@ -1,4 +1,4 @@
-package com.example.blockdirs;
+package top.yixiangren.blockdirs;
 
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.IXposedHookZygoteInit;

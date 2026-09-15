@@ -1,4 +1,4 @@
-package com.example.blockdirs;
+package top.yixiangren.blockdirs;
 
 import android.app.Activity;
 import android.content.pm.PackageInfo;
