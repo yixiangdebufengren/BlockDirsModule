@@ -15,5 +15,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "BlockDirsModule"
+rootProject.name = "top.yixiangren.blockdirs"
 include ':app', ':native'

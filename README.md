@@ -67,7 +67,7 @@ Android 的 MediaProvider（`com.android.providers.media.module`，UID `10176`�
 ## 目录结构
 
 ```
-BlockDirsModule/
+top.yixiangren.blockdirs/
 ├── app/                 # Android 应用（LSPosed 入口 + 关于页 UI）
 │   └── src/main/
 │       ├── java/top/yixiangren/blockdirs/
