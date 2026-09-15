@@ -1,7 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">BlockDirs</string>
-    <string name="usage_tip">使用提醒：请在 LSPosed 中勾选本模块，作用域选择「系统框架」与「com.android.providers.media.module」，重启手机后生效。</string>
+
+    <!-- 使用说明（已修正：无需勾选系统框架，无需重启） -->
+    <string name="usage_tip">在 LSPosed 中启用本模块，作用域勾选「com.android.providers.media」和「com.android.providers.media.module」即可，无需勾选系统框架，启用后立即生效，无需重启。</string>
+
     <!-- 版本号占位，运行时会用 versionName 替换 {version} -->
     <string name="version_footer">BlockDirs v{version} — LSPosed 模块</string>
+
+    <!-- 版本标题 -->
+    <string name="module_app_version_summary">%1$s（%2$d）</string>
+
+    <!-- 使用说明卡片 -->
+    <string name="module_app_build_info_title">使用说明</string>
+
+    <!-- 原理卡片 -->
+    <string name="module_app_principle_title">原理</string>
+    <string name="module_app_principle_desc">本模块 Hook MediaProvider 进程内 libc 的 mkdir / mkdirat，只要检测到目标是外置卷根目录下的第一层目录，就返回成功但不真正创建。\n\n• 不依赖硬编码目录名，零遗漏\n• 排除内部存储 /storage/emulated\n• 更深层子目录不受影响</string>
+
+    <!-- 链接卡片 -->
+    <string name="link_github_title">GitHub</string>
+    <string name="link_github_subtitle">yixiangdebufengren/top.yixiangren.blockdirs</string>
+    <string name="link_blog_title">博客</string>
+    <string name="link_blog_subtitle">yixiangren.top</string>
 </resources>
