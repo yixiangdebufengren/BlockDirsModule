@@ -2,7 +2,7 @@
 
 阻止手机在插入 OTG U 盘 / SD 卡等**外置可移动存储**时，自动在其根目录创建 `Android`、`Music`、`Pictures`、`DCIM`、`Movies` 等标准媒体目录的 LSPosed 模块。
 
-> 面向 ColorOS 16（Android 16 / SDK 36），实测在 `PJZ110`（ColorOS V16.1.0）上端到端验证通过。
+> 已在 ColorOS 16（Android 16，实测 `PJZ110` / ColorOS V16.1.0）上端到端验证通过；理论上基于 AOSP 的系统也可使用。
 
 ---
 
