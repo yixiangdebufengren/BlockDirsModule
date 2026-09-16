@@ -2,6 +2,9 @@
 <resources>
     <string name="app_name">BlockDirs</string>
 
+    <!-- 大标题副文案 -->
+    <string name="app_subtitle">阻止外置存储自动创建标准媒体目录</string>
+
     <!-- 使用说明（已修正：无需勾选系统框架，无需重启） -->
     <string name="usage_tip">在 LSPosed 中启用本模块，作用域勾选「com.android.providers.media」和「com.android.providers.media.module」即可，无需勾选系统框架，启用后立即生效，无需重启。</string>
 
@@ -17,6 +20,9 @@
     <!-- 原理卡片 -->
     <string name="module_app_principle_title">原理</string>
     <string name="module_app_principle_desc">本模块 Hook MediaProvider 进程内 libc 的 mkdir / mkdirat，只要检测到目标是外置卷根目录下的第一层目录，就返回成功但不真正创建。\n\n• 不依赖硬编码目录名，零遗漏\n• 排除内部存储 /storage/emulated\n• 更深层子目录不受影响</string>
+
+    <!-- 链接分组标题 -->
+    <string name="link_section_title">链接</string>
 
     <!-- 链接卡片 -->
     <string name="link_github_title">GitHub</string>
