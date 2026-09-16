@@ -11,6 +11,7 @@
 
 #define TAG "BlockDirsNative"
 #define LOGI(...) __android_log_print(ANDROID_LOG_INFO, TAG, __VA_ARGS__)
+#define LOGW(...) __android_log_print(ANDROID_LOG_WARN, TAG, __VA_ARGS__)
 #define LOGE(...) __android_log_print(ANDROID_LOG_ERROR, TAG, __VA_ARGS__)
 
 // 原始函数指针（由 shadowhook 回填）
@@ -63,7 +64,7 @@ static bool is_top_level_on_external(const char *path) {
 // Hook 后的 mkdir
 static int my_mkdir(const char *path, mode_t mode) {
     if (is_top_level_on_external(path)) {
-        LOGI("BLOCKED mkdir: %s", path);
+        LOGW("BLOCKED mkdir (top-level on external volume): %s", path);
         return 0;
     }
     return orig_mkdir(path, mode);
@@ -72,7 +73,7 @@ static int my_mkdir(const char *path, mode_t mode) {
 // Hook 后的 mkdirat
 static int my_mkdirat(int dirfd, const char *path, mode_t mode) {
     if (is_top_level_on_external(path)) {
-        LOGI("BLOCKED mkdirat: %s", path);
+        LOGW("BLOCKED mkdirat (top-level on external volume): %s", path);
         return 0;
     }
     return orig_mkdirat(dirfd, path, mode);
