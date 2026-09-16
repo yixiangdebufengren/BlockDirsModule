@@ -127,27 +127,26 @@
         <!-- GitHub 链接卡片 -->
         <LinearLayout
             android:id="@+id/card_github"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:paddingHorizontal="20dp"
-            android:paddingVertical="12dp"
+            android:padding="16dp"
             android:background="@drawable/card_bg"
             android:clickable="true"
             android:focusable="true">
 
             <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
                 android:src="@drawable/ic_github"
                 android:contentDescription="@null" />
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
+                android:layout_marginStart="14dp"
+                android:layout_weight="1"
                 android:orientation="vertical">
 
                 <TextView
@@ -155,7 +154,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/link_github_title"
                     android:textColor="@color/color_text_primary"
-                    android:textSize="14sp"
+                    android:textSize="15sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -164,35 +163,34 @@
                     android:layout_marginTop="2dp"
                     android:text="@string/link_github_subtitle"
                     android:textColor="@color/color_text_secondary"
-                    android:textSize="11sp" />
+                    android:textSize="12sp" />
             </LinearLayout>
         </LinearLayout>
 
         <!-- 博客链接卡片 -->
         <LinearLayout
             android:id="@+id/card_blog"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="12dp"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:paddingHorizontal="20dp"
-            android:paddingVertical="12dp"
+            android:padding="16dp"
             android:background="@drawable/card_bg"
             android:clickable="true"
             android:focusable="true">
 
             <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
                 android:src="@drawable/ic_open_in_new"
                 android:contentDescription="@null" />
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
+                android:layout_marginStart="14dp"
+                android:layout_weight="1"
                 android:orientation="vertical">
 
                 <TextView
@@ -200,7 +198,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/link_blog_title"
                     android:textColor="@color/color_text_primary"
-                    android:textSize="14sp"
+                    android:textSize="15sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -209,7 +207,7 @@
                     android:layout_marginTop="2dp"
                     android:text="@string/link_blog_subtitle"
                     android:textColor="@color/color_text_secondary"
-                    android:textSize="11sp" />
+                    android:textSize="12sp" />
             </LinearLayout>
         </LinearLayout>
 
