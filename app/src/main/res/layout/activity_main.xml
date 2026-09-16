@@ -3,23 +3,50 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/color_bg"
-    android:fillViewport="true">
+    android:fillViewport="true"
+    android:scrollbars="none">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingTop="16dp"
-        android:paddingHorizontal="16dp"
-        android:paddingBottom="24dp">
+        android:paddingHorizontal="20dp"
+        android:paddingTop="28dp"
+        android:paddingBottom="28dp">
+
+        <!-- 大标题区 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/app_name"
+                android:textColor="@color/color_text_primary"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.02" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="@string/app_subtitle"
+                android:textColor="@color/color_text_secondary"
+                android:textSize="14sp" />
+        </LinearLayout>
 
         <!-- 使用说明卡片（点击跳转博客） -->
         <LinearLayout
             android:id="@+id/card_guide"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:orientation="vertical"
-            android:padding="16dp"
+            android:padding="18dp"
             android:background="@drawable/card_bg"
             android:clickable="true"
             android:focusable="true">
@@ -31,15 +58,15 @@
                 android:gravity="center_vertical">
 
                 <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
                     android:src="@drawable/ic_info"
                     android:contentDescription="@null" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
+                    android:layout_marginStart="14dp"
                     android:text="@string/module_app_build_info_title"
                     android:textColor="@color/color_text_primary"
                     android:textSize="16sp"
@@ -50,7 +77,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:lineSpacingExtra="3dp"
+                android:lineSpacingExtra="4dp"
                 android:text="@string/usage_tip"
                 android:textColor="@color/color_text_secondary"
                 android:textSize="13sp" />
@@ -60,9 +87,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="14dp"
             android:orientation="vertical"
-            android:padding="16dp"
+            android:padding="18dp"
             android:background="@drawable/card_bg">
 
             <TextView
@@ -76,27 +103,30 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:lineSpacingExtra="3dp"
+                android:layout_marginTop="10dp"
+                android:lineSpacingExtra="4dp"
                 android:text="@string/module_app_principle_desc"
                 android:textColor="@color/color_text_secondary"
-                android:textSize="12sp" />
+                android:textSize="13sp" />
         </LinearLayout>
 
-        <!-- 分隔线 -->
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginVertical="16dp"
-            android:background="@color/color_divider"
-            android:alpha="0.1" />
+        <!-- 链接分组标题 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="10dp"
+            android:text="@string/link_section_title"
+            android:textColor="@color/color_text_tertiary"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.05" />
 
         <!-- GitHub 链接卡片 -->
         <LinearLayout
             android:id="@+id/card_github"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
             android:orientation="horizontal"
             android:gravity="center_vertical"
             android:padding="16dp"
@@ -105,15 +135,15 @@
             android:focusable="true">
 
             <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
                 android:src="@drawable/ic_github"
                 android:contentDescription="@null" />
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="14dp"
                 android:layout_weight="1"
                 android:orientation="vertical">
 
@@ -122,12 +152,13 @@
                     android:layout_height="wrap_content"
                     android:text="@string/link_github_title"
                     android:textColor="@color/color_text_primary"
-                    android:textSize="16sp"
+                    android:textSize="15sp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
                     android:text="@string/link_github_subtitle"
                     android:textColor="@color/color_text_secondary"
                     android:textSize="12sp" />
@@ -148,15 +179,15 @@
             android:focusable="true">
 
             <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
                 android:src="@drawable/ic_open_in_new"
                 android:contentDescription="@null" />
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="14dp"
                 android:layout_weight="1"
                 android:orientation="vertical">
 
@@ -165,12 +196,13 @@
                     android:layout_height="wrap_content"
                     android:text="@string/link_blog_title"
                     android:textColor="@color/color_text_primary"
-                    android:textSize="16sp"
+                    android:textSize="15sp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
                     android:text="@string/link_blog_subtitle"
                     android:textColor="@color/color_text_secondary"
                     android:textSize="12sp" />
@@ -182,7 +214,7 @@
             android:id="@+id/version_footer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="36dp"
             android:gravity="center"
             android:text="@string/version_footer"
             android:textColor="@color/color_text_tertiary"
