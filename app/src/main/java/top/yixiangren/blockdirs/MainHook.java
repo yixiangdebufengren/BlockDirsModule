@@ -23,13 +23,8 @@ public class MainHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
 
     @Override
     public void initZygote(StartupParam startupParam) {
-        try {
-            System.loadLibrary("blockdirs");
-            nativeLoaded = true;
-            XposedBridge.log("[BlockDirs] native lib loaded in zygote");
-        } catch (Throwable t) {
-            XposedBridge.log("[BlockDirs] load native lib failed: " + t);
-        }
+        // 不在 zygote 阶段加载 native 库，避免每个 fork 出来的进程都带库、
+        // 每条日志都刷屏。改为在目标进程（MediaProvider）里按需加载。
     }
 
     @Override
@@ -47,7 +42,7 @@ public class MainHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
                 System.loadLibrary("blockdirs");
                 nativeLoaded = true;
             } catch (Throwable t) {
-                XposedBridge.log("[BlockDirs] load native lib in MediaProvider failed: " + t);
+                XposedBridge.log("[BlockDirs] load native lib in " + lpparam.packageName + " failed: " + t);
                 return;
             }
         }
