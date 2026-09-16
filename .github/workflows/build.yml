@@ -107,20 +107,35 @@ jobs:
           TAG="${{ steps.version.outputs.tag }}"
           VER="BlockDirs v${{ steps.version.outputs.name }}"
           BODY="阻止外置存储（OTG U 盘 / SD 卡）自动创建 Android、Music、Pictures、DCIM、Movies 等标准目录的 LSPosed 模块。"
+          API="https://api.github.com/repos/$REPO"
 
-          curl -s -X DELETE -H "Authorization: token $TOKEN" "https://api.github.com/repos/$REPO/git/refs/tags/$TAG" || true
-          for rid in $(curl -s -H "Authorization: token $TOKEN" "https://api.github.com/repos/$REPO/releases" | jq -r '.[].id' 2>/dev/null); do
-            curl -s -X DELETE -H "Authorization: token $TOKEN" "https://api.github.com/repos/$REPO/releases/$rid" || true
+          # 1. 删除同 tag 的旧 release（若存在），避免重复
+          for rid in $(curl -s -H "Authorization: token $TOKEN" "$API/releases" | jq -r --arg t "$TAG" '.[] | select(.tag_name==$t) | .id' 2>/dev/null); do
+            echo "删除旧 release $rid (tag=$TAG)"
+            curl -s -X DELETE -H "Authorization: token $TOKEN" "$API/releases/$rid" >/dev/null 2>&1 || true
           done
 
-          MAIN_SHA=$(curl -s -H "Authorization: token $TOKEN" "https://api.github.com/repos/$REPO/git/refs/heads/main" | jq -r '.object.sha')
-          TAG_SHA=$(curl -s -X POST -H "Authorization: token $TOKEN" -d "{\"tag\":\"$TAG\",\"message\":\"$VER\",\"object\":\"$MAIN_SHA\",\"type\":\"commit\"}" "https://api.github.com/repos/$REPO/git/tags" | jq -r '.sha')
-          test -n "$TAG_SHA" && test "$TAG_SHA" != "null"
-          curl -s -X POST -H "Authorization: token $TOKEN" -d "{\"ref\":\"refs/tags/$TAG\",\"sha\":\"$TAG_SHA\"}" "https://api.github.com/repos/$REPO/git/refs" >/dev/null
+          # 2. 删除旧 tag ref（先查存在性，存在才删，消除 422 假失败）
+          if curl -s -H "Authorization: token $TOKEN" "$API/git/refs/tags/$TAG" | jq -e '.ref' >/dev/null 2>&1; then
+            echo "删除旧 tag $TAG"
+            curl -s -X DELETE -H "Authorization: token $TOKEN" "$API/git/refs/tags/$TAG" >/dev/null 2>&1 || true
+          fi
 
-          UPLOAD_URL=$(curl -s -X POST -H "Authorization: token $TOKEN" -d "{\"tag_name\":\"$TAG\",\"name\":\"$VER\",\"body\":\"$BODY\",\"draft\":false,\"prerelease\":false}" "https://api.github.com/repos/$REPO/releases" | jq -r '.upload_url')
+          # 3. 取 main 分支 sha 作为 tag 指向
+          MAIN_SHA=$(curl -s -H "Authorization: token $TOKEN" "$API/git/refs/heads/main" | jq -r '.object.sha')
+          test -n "$MAIN_SHA" && test "$MAIN_SHA" != "null"
+
+          # 4. 创建 release（带 target_commitish，让 GitHub 自动创建 lightweight tag，消除竞态）
+          RESP=$(curl -s --fail -X POST -H "Authorization: token $TOKEN" \
+            -d "{\"tag_name\":\"$TAG\",\"target_commitish\":\"$MAIN_SHA\",\"name\":\"$VER\",\"body\":\"$BODY\",\"draft\":false,\"prerelease\":false}" \
+            "$API/releases")
+          UPLOAD_URL=$(echo "$RESP" | jq -r '.upload_url')
+          test -n "$UPLOAD_URL" && test "$UPLOAD_URL" != "null"
+
+          # 5. 上传 APK
           UPLOAD_URL="${UPLOAD_URL%\{*}?name=app-release.apk"
+          curl -s --fail -X POST -H "Authorization: token $TOKEN" \
+            -H "Content-Type: application/vnd.android.package-archive" \
+            --data-binary "@app-release.apk" "$UPLOAD_URL" >/dev/null
 
-          curl -s -X POST -H "Authorization: token $TOKEN" -H "Content-Type: application/vnd.android.package-archive" --data-binary "@app-release.apk" "$UPLOAD_URL" >/dev/null
-
-          echo "mirror release published, bot will publish in 5min"
+          echo "mirror release published ($TAG), bot will publish in 5min"
