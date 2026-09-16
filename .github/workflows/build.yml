@@ -148,4 +148,22 @@ jobs:
             -H "Content-Type: application/vnd.android.package-archive" \
             --data-binary "@app-release.apk" "$UPLOAD_URL" >/dev/null
 
+          # 6. 同步 README 到镜像仓库（让模块详情页显示完整介绍）
+          if [ -f README.md ]; then
+            README_B64=$(base64 -w0 README.md)
+            # 查镜像仓库 README.md 当前 sha（存在则更新，否则创建）
+            README_SHA=$(curl -s -H "Authorization: token $TOKEN" "$API/contents/README.md" | jq -r '.sha // empty')
+            if [ -n "$README_SHA" ]; then
+              echo "更新镜像 README.md (sha=$README_SHA)"
+              curl -s --fail -X PUT -H "Authorization: token $TOKEN" \
+                -d "{\"message\":\"docs: 同步 README\",\"content\":\"$README_B64\",\"sha\":\"$README_SHA\"}" \
+                "$API/contents/README.md" >/dev/null
+            else
+              echo "创建镜像 README.md"
+              curl -s --fail -X PUT -H "Authorization: token $TOKEN" \
+                -d "{\"message\":\"docs: 初始化 README\",\"content\":\"$README_B64\"}" \
+                "$API/contents/README.md" >/dev/null
+            fi
+          fi
+
           echo "mirror release published ($TAG), bot will publish in 5min"
