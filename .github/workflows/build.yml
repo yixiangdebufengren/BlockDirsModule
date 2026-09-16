@@ -46,9 +46,11 @@ jobs:
           VC=$(grep -oP 'versionCode\s+\K[0-9]+' app/build.gradle | head -1)
           VN=$(grep -oP 'versionName\s+"\K[^"]+' app/build.gradle | head -1)
           TAG="${VC}-${VN}"
+          MSG=$(git log -1 --pretty=%B)
           echo "vc=$VC" >> "$GITHUB_OUTPUT"
           echo "vn=$VN" >> "$GITHUB_OUTPUT"
           echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "msg=$MSG" >> "$GITHUB_OUTPUT"
           echo "Version: code=$VC name=$VN tag=$TAG"
 
       - name: Remove old tag & release
@@ -68,6 +70,9 @@ jobs:
           body: |
             阻止外置存储（OTG U 盘 / SD 卡）自动创建 Android、Music、Pictures、DCIM、Movies 等标准目录的 LSPosed 模块。
 
+            ## 本次更新
+            ${{ steps.version.outputs.msg }}
+
             ## 使用说明
             1. 手机需已 Root 并安装 LSPosed；
             2. 下载下方 app-release.apk 安装；
@@ -83,14 +88,18 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Read version
         id: version
         run: |
           VC=$(grep -oP 'versionCode\s+\K[0-9]+' app/build.gradle | head -1)
           VN=$(grep -oP 'versionName\s+"\K[^"]+' app/build.gradle | head -1)
+          MSG=$(git log -1 --pretty=%B)
           echo "tag=${VC}-${VN}" >> "$GITHUB_OUTPUT"
           echo "name=${VN}" >> "$GITHUB_OUTPUT"
+          echo "msg=${MSG}" >> "$GITHUB_OUTPUT"
 
       - name: Download APK from source release
         run: |
@@ -106,7 +115,8 @@ jobs:
           REPO="Xposed-Modules-Repo/top.yixiangren.blockdirs"
           TAG="${{ steps.version.outputs.tag }}"
           VER="BlockDirs v${{ steps.version.outputs.name }}"
-          BODY="阻止外置存储（OTG U 盘 / SD 卡）自动创建 Android、Music、Pictures、DCIM、Movies 等标准目录的 LSPosed 模块。"
+          MSG="${{ steps.version.outputs.msg }}"
+          BODY="阻止外置存储（OTG U 盘 / SD 卡）自动创建 Android、Music、Pictures、DCIM、Movies 等标准目录的 LSPosed 模块。\n\n本次更新：\n${MSG}"
           API="https://api.github.com/repos/$REPO"
 
           # 1. 删除同 tag 的旧 release（若存在），避免重复
