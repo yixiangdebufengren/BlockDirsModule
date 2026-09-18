@@ -156,15 +156,11 @@
                     android:textSize="12sp" />
             </LinearLayout>
 
-            <Switch
+            <com.google.android.material.materialswitch.MaterialSwitch
                 android:id="@+id/switch_hide_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:thumb="@drawable/switch_thumb"
-                android:track="@drawable/switch_track"
-                android:showText="false"
-                android:switchMinWidth="56dp" />
+                android:layout_marginStart="12dp" />
         </LinearLayout>
 
         <!-- 链接分组标题 -->

@@ -65,7 +65,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.version.outputs.tag }}
-          name: BlockDirs v${{ steps.version.outputs.vn }}
+          name: BlockDirs v${{ steps.version.outputs.vc }} (${{ steps.version.outputs.vn }})
           files: app/build/outputs/apk/release/*.apk
           body: |
             阻止外置存储（OTG U 盘 / SD 卡）自动创建 Android、Music、Pictures、DCIM、Movies 等标准目录的 LSPosed 模块。

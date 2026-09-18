@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="AppTheme" parent="android:Theme.Material.NoActionBar">
+    <style name="AppTheme" parent="Theme.Material3.Dark.NoActionBar">
+        <item name="colorPrimary">@color/color_icon</item>
+        <item name="colorOnPrimary">@android:color/white</item>
+        <item name="colorPrimaryContainer">@color/color_card</item>
+        <item name="colorOnPrimaryContainer">@color/color_text_primary</item>
+        <item name="colorSurface">@color/color_bg</item>
+        <item name="colorOnSurface">@color/color_text_primary</item>
+        <item name="colorSurfaceVariant">@color/color_card</item>
+        <item name="colorOnSurfaceVariant">@color/color_text_secondary</item>
+        <item name="colorOutline">@color/color_divider</item>
         <item name="android:windowBackground">@color/color_bg</item>
         <item name="android:statusBarColor">@color/color_bg</item>
-        <item name="android:colorPrimary">@color/color_icon</item>
-        <item name="android:colorAccent">@color/color_icon</item>
         <item name="android:windowLightStatusBar">false</item>
+        <item name="android:colorAccent">@color/color_icon</item>
     </style>
 </resources>

@@ -31,8 +31,9 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
-            shrinkResources false
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             // 复用 debug 签名：release 与 debug 可互覆盖安装
             signingConfig signingConfigs.debug
         }
@@ -47,4 +48,6 @@ android {
 dependencies {
     compileOnly 'de.robv.android.xposed:api:82'
     implementation project(':native')
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation 'com.google.android.material:material:1.12.0'
 }
