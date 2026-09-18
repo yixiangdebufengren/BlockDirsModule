@@ -1,7 +1,6 @@
 package top.yixiangren.blockdirs;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -14,10 +13,11 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.core.graphics.ColorUtils;
 import com.google.android.material.color.DynamicColors;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.materialswitch.MaterialSwitch;
+import com.google.android.material.snackbar.Snackbar;
 
 /**
  * BlockDirs 模块主页（视觉复刻 WeKit 风格）。
@@ -186,7 +186,7 @@ public class MainActivity extends Activity {
 
     /** 手动检查更新：弹"正在检查"进度，完成后提示最新或弹更新弹窗。 */
     private void manualCheckUpdate() {
-        AlertDialog progress = new AlertDialog.Builder(this)
+        android.app.AlertDialog progress = new MaterialAlertDialogBuilder(this)
                 .setMessage(R.string.update_checking)
                 .setCancelable(false)
                 .create();
@@ -197,9 +197,9 @@ public class MainActivity extends Activity {
             if (info != null) {
                 showUpdateDialog(info);
             } else if (error) {
-                Toast.makeText(this, R.string.update_check_failed, Toast.LENGTH_SHORT).show();
+                snack(R.string.update_check_failed);
             } else {
-                Toast.makeText(this, R.string.update_dialog_no_update, Toast.LENGTH_SHORT).show();
+                snack(R.string.update_dialog_no_update);
             }
         });
     }
@@ -209,7 +209,7 @@ public class MainActivity extends Activity {
         String message = getString(R.string.update_dialog_message,
                 getVersionCode(), info.versionCode, info.versionName);
 
-        new AlertDialog.Builder(this)
+        new MaterialAlertDialogBuilder(this)
                 .setTitle(R.string.update_dialog_title)
                 .setMessage(message)
                 .setPositiveButton(R.string.update_dialog_now, (d, w) -> {
@@ -220,6 +220,14 @@ public class MainActivity extends Activity {
                         UpdateChecker.ignoreVersion(this, info.versionCode))
                 .setNegativeButton(R.string.update_dialog_later, null)
                 .show();
+    }
+
+    /** Material 风格短提示（Snackbar）。 */
+    private void snack(int resId) {
+        View root = findViewById(android.R.id.content);
+        if (root != null) {
+            Snackbar.make(root, resId, Snackbar.LENGTH_SHORT).show();
+        }
     }
 
     private String getVersionName() {
