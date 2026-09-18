@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- M3 风格 Switch 轨道：选中/未选中两态 -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 选中：主绿色填充 -->
+    <item android:state_checked="true">
+        <shape android:shape="rectangle">
+            <corners android:radius="14dp" />
+            <solid android:color="@color/color_icon" />
+            <size android:width="52dp" android:height="32dp" />
+        </shape>
+    </item>
+    <!-- 未选中：浅灰描边轨道 -->
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="14dp" />
+            <solid android:color="@color/switch_track_off" />
+            <stroke android:width="2dp" android:color="@color/switch_stroke_off" />
+            <size android:width="52dp" android:height="32dp" />
+        </shape>
+    </item>
+</selector>

@@ -7,15 +7,29 @@
         android:icon="@android:drawable/sym_def_app_icon"
         android:theme="@style/AppTheme">
 
+        <!-- 真正入口：仅 MODULE_SETTINGS，供 LSPosed「打开模块」进入，不显示桌面图标 -->
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="de.robv.android.xposed.category.MODULE_SETTINGS" />
             </intent-filter>
         </activity>
+
+        <!-- 桌面图标别名：唯一桌面入口，通过 enable/disable 实现隐藏/恢复图标 -->
+        <activity-alias
+            android:name=".MainActivityAlias"
+            android:label="@string/app_name"
+            android:icon="@android:drawable/sym_def_app_icon"
+            android:targetActivity=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
 
         <meta-data
             android:name="xposedmodule"

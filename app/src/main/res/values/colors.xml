@@ -7,4 +7,8 @@
     <color name="color_text_tertiary">#717970</color>
     <color name="color_divider">#181D18</color>
     <color name="color_icon">#336940</color>
+
+    <!-- M3 风格开关 -->
+    <color name="switch_track_off">#E8E8E8</color>
+    <color name="switch_stroke_off">#74777F</color>
 </resources>

@@ -1,11 +1,13 @@
 package top.yixiangren.blockdirs;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.widget.Switch;
 import android.widget.TextView;
 
 /**
@@ -23,6 +25,35 @@ public class MainActivity extends Activity {
 
         bindVersion();
         bindLinks();
+        bindHideIconSwitch();
+    }
+
+    /** 绑定「隐藏桌面图标」开关：切换 activity-alias 的 enabled 状态 */
+    private void bindHideIconSwitch() {
+        Switch sw = findViewById(R.id.switch_hide_icon);
+        if (sw == null) return;
+
+        boolean hidden = isIconHidden();
+        sw.setChecked(hidden);
+        sw.setOnCheckedChangeListener((buttonView, isChecked) ->
+                setIconHidden(isChecked));
+    }
+
+    private boolean isIconHidden() {
+        ComponentName alias = new ComponentName(this, getPackageName() + ".MainActivityAlias");
+        int state = getPackageManager().getComponentEnabledSetting(alias);
+        return state == PackageManager.COMPONENT_ENABLED_STATE_DISABLED
+                || state == PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER
+                || state == PackageManager.COMPONENT_ENABLED_STATE_DISABLED_UNTIL_USED;
+    }
+
+    private void setIconHidden(boolean hidden) {
+        ComponentName alias = new ComponentName(this, getPackageName() + ".MainActivityAlias");
+        int newState = hidden
+                ? PackageManager.COMPONENT_ENABLED_STATE_DISABLED
+                : PackageManager.COMPONENT_ENABLED_STATE_ENABLED;
+        getPackageManager().setComponentEnabledSetting(
+                alias, newState, PackageManager.DONT_KILL_APP);
     }
 
     private void bindVersion() {
