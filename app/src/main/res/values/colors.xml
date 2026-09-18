@@ -11,4 +11,8 @@
     <!-- M3 风格开关 -->
     <color name="switch_track_off">#E8E8E8</color>
     <color name="switch_stroke_off">#74777F</color>
+
+    <!-- 模块激活状态卡片 -->
+    <color name="status_active">#4CAF50</color>
+    <color name="status_inactive">#F44336</color>
 </resources>

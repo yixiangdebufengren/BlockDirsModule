@@ -2,11 +2,15 @@ package top.yixiangren.blockdirs;
 
 import android.app.Activity;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.google.android.material.materialswitch.MaterialSwitch;
 
@@ -26,6 +30,43 @@ public class MainActivity extends Activity {
         bindVersion();
         bindLinks();
         bindHideIconSwitch();
+        bindActivationStatus();
+    }
+
+    /**
+     * 绑定「模块激活状态」卡片。
+     * 读取 MainHook 在目标进程 hook 成功后写入的 world-readable 标记，
+     * 判断模块是否真的加载并生效，动态切换卡片配色 / 图标 / 文案。
+     */
+    private void bindActivationStatus() {
+        LinearLayout card = findViewById(R.id.card_status);
+        TextView title = findViewById(R.id.status_title);
+        TextView desc = findViewById(R.id.status_desc);
+        ImageView icon = findViewById(R.id.status_icon);
+        if (card == null || title == null || desc == null || icon == null) return;
+
+        boolean active = isModuleActive();
+        if (active) {
+            card.setBackgroundResource(R.drawable.card_status_green);
+            icon.setImageResource(R.drawable.ic_status_ok);
+            title.setText(R.string.module_status_title_active);
+            desc.setText(R.string.module_status_desc_active);
+        } else {
+            card.setBackgroundResource(R.drawable.card_status_red);
+            icon.setImageResource(R.drawable.ic_status_warn);
+            title.setText(R.string.module_status_title_inactive);
+            desc.setText(R.string.module_status_desc_inactive);
+        }
+    }
+
+    /** 判断 hook 是否真正生效：读 MainHook 写入的跨进程标记 */
+    private boolean isModuleActive() {
+        try {
+            SharedPreferences prefs = getSharedPreferences("blockdirs_status", Context.MODE_WORLD_READABLE);
+            return prefs.getLong("last_hook_time", 0L) > 0L;
+        } catch (Throwable t) {
+            return false;
+        }
     }
 
     /** 绑定「隐藏桌面图标」开关：切换 activity-alias 的 enabled 状态 */
