@@ -34,12 +34,17 @@ public class MainHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
         // 激活检测：LSPosed 会默认自动 hook 模块自身（无需把自己写进 xposed_scope）。
         // 当模块自己的进程被加载时，hook ModuleActive.isActive() 使其返回 true，
         // UI 进程据此判断"已激活"；关闭模块后该 hook 不再注入，自然回到 false。
+        // 对齐简书方案：用 lpparam.classLoader + 全限类名字符串 hook，保证
+        // 在应用进程自己的 ClassLoader 里解析到 ModuleActive。
         if ("top.yixiangren.blockdirs".equals(lpparam.packageName)) {
+            XposedBridge.log("[BlockDirs] self process loaded, hooking ModuleActive.isActive");
             try {
                 XposedHelpers.findAndHookMethod(
-                        ModuleActive.class,
+                        "top.yixiangren.blockdirs.ModuleActive",
+                        lpparam.classLoader,
                         "isActive",
                         XC_MethodReplacement.returnConstant(true));
+                XposedBridge.log("[BlockDirs] hook ModuleActive.isActive OK");
             } catch (Throwable t) {
                 XposedBridge.log("[BlockDirs] hook ModuleActive.isActive failed: " + t);
             }
