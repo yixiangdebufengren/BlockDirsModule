@@ -21,6 +21,11 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
  */
 public class MainHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
 
+    private static final String TAG = "BlockDirs";
+    private static final String SELF_PACKAGE = "top.yixiangren.blockdirs";
+    private static final String MEDIA_PROVIDER = "com.android.providers.media.module";
+    private static final String MEDIA_PROVIDER_LEGACY = "com.android.providers.media";
+
     private static volatile boolean nativeLoaded = false;
 
     @Override
@@ -31,46 +36,55 @@ public class MainHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
 
     @Override
     public void handleLoadPackage(LoadPackageParam lpparam) {
-        // 激活检测：LSPosed 会默认自动 hook 模块自身（无需把自己写进 xposed_scope）。
-        // 当模块自己的进程被加载时，hook ModuleActive.isActive() 使其返回 true，
-        // UI 进程据此判断"已激活"；关闭模块后该 hook 不再注入，自然回到 false。
-        // 对齐简书方案：用 lpparam.classLoader + 全限类名字符串 hook，保证
-        // 在应用进程自己的 ClassLoader 里解析到 ModuleActive。
-        if ("top.yixiangren.blockdirs".equals(lpparam.packageName)) {
-            XposedBridge.log("[BlockDirs] self process loaded, hooking ModuleActive.isActive");
-            try {
-                XposedHelpers.findAndHookMethod(
-                        "top.yixiangren.blockdirs.ModuleActive",
-                        lpparam.classLoader,
-                        "isActive",
-                        XC_MethodReplacement.returnConstant(true));
-                XposedBridge.log("[BlockDirs] hook ModuleActive.isActive OK");
-            } catch (Throwable t) {
-                XposedBridge.log("[BlockDirs] hook ModuleActive.isActive failed: " + t);
-            }
+        if (SELF_PACKAGE.equals(lpparam.packageName)) {
+            hookSelfActivation(lpparam.classLoader);
             return;
         }
 
-        boolean isMediaProvider =
-                "com.android.providers.media.module".equals(lpparam.packageName)
-                        || "com.android.providers.media".equals(lpparam.packageName);
-
-        if (!isMediaProvider) {
+        if (!isMediaProvider(lpparam.packageName)) {
             return;
         }
 
-        if (!nativeLoaded) {
-            try {
-                System.loadLibrary("blockdirs");
-                nativeLoaded = true;
-            } catch (Throwable t) {
-                XposedBridge.log("[BlockDirs] load native lib in " + lpparam.packageName + " failed: " + t);
-                return;
-            }
+        if (!ensureNativeLoaded()) {
+            return;
         }
 
-        XposedBridge.log("[BlockDirs] hooking " + lpparam.packageName);
         installNativeHook();
+    }
+
+    /**
+     * 激活检测：LSPosed 传统模式会无条件把模块加载到自身进程（无需写进 xposed_scope）。
+     * 这里 hook 自己的 {@link ModuleActive#isActive()} 使其返回 true，UI 据此显示"已激活"；
+     * 关闭模块后该 hook 不再注入，自然回到 false，无任何持久化残留。
+     */
+    private static void hookSelfActivation(ClassLoader classLoader) {
+        try {
+            XposedHelpers.findAndHookMethod(
+                    SELF_PACKAGE + ".ModuleActive",
+                    classLoader,
+                    "isActive",
+                    XC_MethodReplacement.returnConstant(true));
+        } catch (Throwable t) {
+            XposedBridge.log("[" + TAG + "] hook ModuleActive.isActive failed: " + t);
+        }
+    }
+
+    private static boolean isMediaProvider(String packageName) {
+        return MEDIA_PROVIDER.equals(packageName) || MEDIA_PROVIDER_LEGACY.equals(packageName);
+    }
+
+    private static boolean ensureNativeLoaded() {
+        if (nativeLoaded) {
+            return true;
+        }
+        try {
+            System.loadLibrary("blockdirs");
+            nativeLoaded = true;
+            return true;
+        } catch (Throwable t) {
+            XposedBridge.log("[" + TAG + "] load native lib failed: " + t);
+            return false;
+        }
     }
 
     private static native void installNativeHook();
