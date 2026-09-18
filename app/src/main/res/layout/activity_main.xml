@@ -161,12 +161,14 @@
                 android:layout_width="52dp"
                 android:layout_height="32dp"
                 android:layout_marginStart="12dp"
-                android:minWidth="0dp"
-                android:minHeight="0dp"
+                android:minWidth="52dp"
+                android:minHeight="32dp"
                 android:thumb="@drawable/switch_thumb"
                 android:track="@drawable/switch_track"
                 android:showText="false"
-                android:splitTrack="false" />
+                android:thumbTextPadding="0dp"
+                android:switchMinWidth="52dp"
+                android:switchPadding="0dp" />
         </LinearLayout>
 
         <!-- 链接分组标题 -->
