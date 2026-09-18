@@ -32,6 +32,8 @@
     <!-- 链接卡片 -->
     <string name="link_github_title">GitHub</string>
     <string name="link_github_subtitle">yixiangdebufengren/top.yixiangren.blockdirs</string>
+    <string name="link_update_title">检查更新</string>
+    <string name="link_update_subtitle">前往 GitHub Releases 下载最新版本</string>
     <string name="link_blog_title">博客</string>
     <string name="link_blog_subtitle">yixiangren.top</string>
 

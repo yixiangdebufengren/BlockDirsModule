@@ -143,15 +143,18 @@ public class MainActivity extends Activity {
     }
 
     private void bindLinks() {
+        String repoUrl = "https://github.com/yixiangdebufengren/top.yixiangren.blockdirs";
         int[] cards = {
                 R.id.card_guide,
                 R.id.card_github,
-                R.id.card_blog
+                R.id.card_blog,
+                R.id.card_update
         };
         String[] urls = {
                 "https://yixiangren.top/463187456",
-                "https://github.com/yixiangdebufengren/top.yixiangren.blockdirs",
-                "https://yixiangren.top"
+                repoUrl,
+                "https://yixiangren.top",
+                repoUrl + "/releases/latest"
         };
         for (int i = 0; i < cards.length; i++) {
             final String url = urls[i];
