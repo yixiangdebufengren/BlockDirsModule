@@ -16,6 +16,7 @@ import android.widget.TextView;
 import androidx.core.graphics.ColorUtils;
 import com.google.android.material.color.DynamicColors;
 import com.google.android.material.materialswitch.MaterialSwitch;
+import de.robv.android.xposed.XSharedPreferences;
 
 /**
  * BlockDirs 模块主页（视觉复刻 WeKit 风格）。
@@ -96,17 +97,20 @@ public class MainActivity extends Activity {
     }
 
     /**
-     * 判断模块是否激活（免 root，借鉴 WeKit HookStatus.isLegacyXposed）。
-     * 传统模式下 LSPosed 把 XposedBridge 注入 zygote，每个 APP 进程
-     * 的 system classloader 都能加载到该类，因此模块 UI 进程检测到
-     * 该类存在，即代表框架已激活。
+     * 判断模块是否激活（借鉴 YukiHookAPI 的 isXposedModuleActive 思路）。
+     *
+     * 激活信号 = 模块的 hook 代码被框架（LSPosed）加载进 zygote 并执行，
+     * 即用户在 LSPosed 里勾选启用了本模块。hook 侧在 initZygote 里把该信号
+     * 写入模块自己的 shared_prefs，这里用 XSharedPreferences 跨进程读取，
+     * 免 root、不依赖模块自己被 scope 命中。
      */
     private boolean isModuleActive() {
         try {
-            ClassLoader cl = ClassLoader.getSystemClassLoader();
-            cl.loadClass("de.robv.android.xposed.XposedBridge");
-            return true;
-        } catch (ClassNotFoundException e) {
+            XSharedPreferences prefs = new XSharedPreferences(
+                    getPackageName(), ModuleStatus.PREFS_NAME);
+            prefs.reload();
+            return prefs.getBoolean(ModuleStatus.KEY_ACTIVE, false);
+        } catch (Throwable t) {
             return false;
         }
     }

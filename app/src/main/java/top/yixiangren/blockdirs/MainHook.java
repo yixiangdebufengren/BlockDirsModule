@@ -2,6 +2,7 @@ package top.yixiangren.blockdirs;
 
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.IXposedHookZygoteInit;
+import de.robv.android.xposed.XSharedPreferences;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
@@ -25,6 +26,27 @@ public class MainHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
     public void initZygote(StartupParam startupParam) {
         // 不在 zygote 阶段加载 native 库，避免每个 fork 出来的进程都带库、
         // 每条日志都刷屏。改为在目标进程（MediaProvider）里按需加载。
+
+        // 激活检测：本方法被回调，即代表模块已被框架（LSPosed）加载进 zygote，
+        // 等价于"用户在 LSPosed 里勾选启用了本模块"。把该信号写入模块自己的
+        // shared_prefs，供 UI 进程用 XSharedPreferences 跨进程读取（免 root、
+        // 不依赖模块自己被 scope 命中）。
+        writeActiveFlag();
+    }
+
+    /**
+     * 在模块自己的 shared_prefs 里写入「已激活」标记。
+     * 运行在 zygote/root 环境，可写模块 private 数据目录。
+     */
+    private void writeActiveFlag() {
+        try {
+            XSharedPreferences prefs = new XSharedPreferences(
+                    "top.yixiangren.blockdirs", ModuleStatus.PREFS_NAME);
+            prefs.makeWorldReadable();
+            prefs.edit().putBoolean(ModuleStatus.KEY_ACTIVE, true).commit();
+        } catch (Throwable t) {
+            XposedBridge.log("[BlockDirs] write active flag failed: " + t);
+        }
     }
 
     @Override
