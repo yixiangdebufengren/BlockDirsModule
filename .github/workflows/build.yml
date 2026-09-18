@@ -43,8 +43,8 @@ jobs:
       - name: Read version
         id: version
         run: |
-          VC=$(grep -oP 'versionCode\s+\K[0-9]+' app/build.gradle | head -1)
-          VN=$(grep -oP 'versionName\s+"\K[^"]+' app/build.gradle | head -1)
+          VC=$(git rev-list --count HEAD)
+          VN="git+$(git rev-parse --short=8 HEAD)"
           TAG="${VC}-${VN}"
           MSG=$(git log -1 --pretty=%B)
           echo "vc=$VC" >> "$GITHUB_OUTPUT"
@@ -94,8 +94,8 @@ jobs:
       - name: Read version
         id: version
         run: |
-          VC=$(grep -oP 'versionCode\s+\K[0-9]+' app/build.gradle | head -1)
-          VN=$(grep -oP 'versionName\s+"\K[^"]+' app/build.gradle | head -1)
+          VC=$(git rev-list --count HEAD)
+          VN="git+$(git rev-parse --short=8 HEAD)"
           MSG=$(git log -1 --pretty=%B)
           echo "tag=${VC}-${VN}" >> "$GITHUB_OUTPUT"
           echo "name=${VN}" >> "$GITHUB_OUTPUT"
