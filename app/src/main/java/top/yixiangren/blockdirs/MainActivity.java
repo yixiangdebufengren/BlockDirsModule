@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import com.google.android.material.color.DynamicColors;
 import com.google.android.material.materialswitch.MaterialSwitch;
 
 /**
@@ -23,6 +24,8 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Material You 动态取色：跟随系统壁纸取色，新设备生效，旧设备自动降级
+        DynamicColors.applyToActivitiesIfAvailable(getApplication());
         setContentView(R.layout.activity_main);
 
         bindVersion();
