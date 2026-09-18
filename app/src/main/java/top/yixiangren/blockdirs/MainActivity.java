@@ -5,11 +5,15 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import androidx.core.graphics.ColorUtils;
 import com.google.android.material.color.DynamicColors;
 import com.google.android.material.materialswitch.MaterialSwitch;
 
@@ -27,11 +31,40 @@ public class MainActivity extends Activity {
         // Material You 动态取色：跟随系统壁纸取色，新设备生效，旧设备自动降级
         DynamicColors.applyToActivitiesIfAvailable(getApplication());
         setContentView(R.layout.activity_main);
+        applyStatusBar();
 
         bindVersion();
         bindLinks();
         bindHideIconSwitch();
         bindActivationStatus();
+    }
+
+    /**
+     * 让状态栏背景跟随动态取色的 colorSurface，并把状态栏图标/文字设为深色。
+     * 避免 Material3 默认把状态栏染成偏深蓝/深色的 colorPrimary 造成的突兀感。
+     */
+    private void applyStatusBar() {
+        Window window = getWindow();
+        // 取动态取色后的 surface 色作为状态栏背景（与页面背景一致）
+        int surface = resolveThemeColor(android.R.attr.colorSurface);
+        window.setStatusBarColor(surface);
+        // 浅色背景 -> 深色前景图标，深色背景 -> 浅色前景图标
+        boolean isLight = ColorUtils.calculateLuminance(surface) > 0.5;
+        int flags = window.getDecorView().getSystemUiVisibility();
+        if (isLight) {
+            flags |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+        } else {
+            flags &= ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+        }
+        window.getDecorView().setSystemUiVisibility(flags);
+    }
+
+    private int resolveThemeColor(int attr) {
+        android.util.TypedValue tv = new android.util.TypedValue();
+        if (getTheme().resolveAttribute(attr, tv, true)) {
+            return tv.data;
+        }
+        return Color.WHITE;
     }
 
     /**
