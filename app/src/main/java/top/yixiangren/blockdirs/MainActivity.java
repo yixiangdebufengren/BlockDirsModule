@@ -2,9 +2,7 @@ package top.yixiangren.blockdirs;
 
 import android.app.Activity;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -35,8 +33,9 @@ public class MainActivity extends Activity {
 
     /**
      * 绑定「模块激活状态」卡片。
-     * 读取 MainHook 在目标进程 hook 成功后写入的 world-readable 标记，
-     * 判断模块是否真的加载并生效，动态切换卡片配色 / 图标 / 文案。
+     * 检测 LSPosed 框架是否已注入 zygote（传统模式免 root）：
+     * 若系统 classloader 能加载 XposedBridge，说明框架已激活，
+     * 模块 UI 既已能启动，即为已激活状态。
      */
     private void bindActivationStatus() {
         LinearLayout card = findViewById(R.id.card_status);
@@ -59,12 +58,18 @@ public class MainActivity extends Activity {
         }
     }
 
-    /** 判断 hook 是否真正生效：读 MainHook 写入的跨进程标记 */
+    /**
+     * 判断模块是否激活（免 root，借鉴 WeKit HookStatus.isLegacyXposed）。
+     * 传统模式下 LSPosed 把 XposedBridge 注入 zygote，每个 APP 进程
+     * 的 system classloader 都能加载到该类，因此模块 UI 进程检测到
+     * 该类存在，即代表框架已激活。
+     */
     private boolean isModuleActive() {
         try {
-            SharedPreferences prefs = getSharedPreferences("blockdirs_status", Context.MODE_WORLD_READABLE);
-            return prefs.getLong("last_hook_time", 0L) > 0L;
-        } catch (Throwable t) {
+            ClassLoader cl = ClassLoader.getSystemClassLoader();
+            cl.loadClass("de.robv.android.xposed.XposedBridge");
+            return true;
+        } catch (ClassNotFoundException e) {
             return false;
         }
     }

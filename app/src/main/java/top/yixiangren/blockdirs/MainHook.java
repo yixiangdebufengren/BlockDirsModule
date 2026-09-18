@@ -3,7 +3,6 @@ package top.yixiangren.blockdirs;
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.IXposedHookZygoteInit;
 import de.robv.android.xposed.XposedBridge;
-import de.robv.android.xposed.XSharedPreferences;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
 /**
@@ -50,17 +49,6 @@ public class MainHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
 
         XposedBridge.log("[BlockDirs] hooking " + lpparam.packageName);
         installNativeHook();
-
-        // 写激活标记：供模块 UI（独立进程）读取，判断 hook 是否真正生效。
-        // 用 XSharedPreferences + world-readable 方式，传统 API 免 root。
-        try {
-            XSharedPreferences prefs = new XSharedPreferences("top.yixiangren.blockdirs", "blockdirs_status");
-            prefs.makeWorldReadable();
-            prefs.reload();
-            prefs.edit().putLong("last_hook_time", System.currentTimeMillis()).commit();
-        } catch (Throwable t) {
-            XposedBridge.log("[BlockDirs] write status failed: " + t);
-        }
     }
 
     private static native void installNativeHook();
