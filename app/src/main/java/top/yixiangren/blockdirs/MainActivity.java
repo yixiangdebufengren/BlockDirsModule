@@ -16,7 +16,7 @@ import android.widget.TextView;
 import androidx.core.graphics.ColorUtils;
 import com.google.android.material.color.DynamicColors;
 import com.google.android.material.materialswitch.MaterialSwitch;
-import de.robv.android.xposed.XSharedPreferences;
+import java.io.File;
 
 /**
  * BlockDirs 模块主页（视觉复刻 WeKit 风格）。
@@ -100,16 +100,14 @@ public class MainActivity extends Activity {
      * 判断模块是否激活（借鉴 YukiHookAPI 的 isXposedModuleActive 思路）。
      *
      * 激活信号 = 模块的 hook 代码被框架（LSPosed）加载进 zygote 并执行，
-     * 即用户在 LSPosed 里勾选启用了本模块。hook 侧在 initZygote 里把该信号
-     * 写入模块自己的 shared_prefs，这里用 XSharedPreferences 跨进程读取，
-     * 免 root、不依赖模块自己被 scope 命中。
+     * 即用户在 LSPosed 里勾选启用了本模块。hook 侧在 initZygote /
+     * handleLoadPackage 里把该信号写入模块自己的 files 目录下的标记文件，
+     * 这里读同一路径（同 uid）即可，免 root、不依赖模块自己被 scope 命中。
      */
     private boolean isModuleActive() {
         try {
-            XSharedPreferences prefs = new XSharedPreferences(
-                    getPackageName(), ModuleStatus.PREFS_NAME);
-            prefs.reload();
-            return prefs.getBoolean(ModuleStatus.KEY_ACTIVE, false);
+            File flag = new File(ModuleStatus.FILES_DIR, ModuleStatus.FLAG_FILE);
+            return flag.exists();
         } catch (Throwable t) {
             return false;
         }
