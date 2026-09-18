@@ -186,7 +186,7 @@ public class MainActivity extends Activity {
 
     /** 手动检查更新：弹"正在检查"进度，完成后提示最新或弹更新弹窗。 */
     private void manualCheckUpdate() {
-        android.app.AlertDialog progress = new MaterialAlertDialogBuilder(this)
+        androidx.appcompat.app.AlertDialog progress = new MaterialAlertDialogBuilder(this)
                 .setMessage(R.string.update_checking)
                 .setCancelable(false)
                 .create();
