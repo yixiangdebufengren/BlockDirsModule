@@ -40,6 +40,8 @@
     <string name="update_dialog_ignore">忽略本次</string>
     <string name="update_dialog_later">稍后再说</string>
     <string name="update_dialog_no_update">已是最新版本</string>
+    <string name="update_checking">正在检查更新…</string>
+    <string name="update_check_failed">检查更新失败，请检查网络</string>
 
     <!-- 模块激活状态卡片 -->
     <string name="module_status_title_active">已激活</string>

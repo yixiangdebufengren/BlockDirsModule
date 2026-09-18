@@ -14,6 +14,7 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.core.graphics.ColorUtils;
 import com.google.android.material.color.DynamicColors;
 import com.google.android.material.materialswitch.MaterialSwitch;
@@ -38,6 +39,7 @@ public class MainActivity extends Activity {
         bindLinks();
         bindHideIconSwitch();
         bindActivationStatus();
+        bindUpdateCheck();
         checkUpdate();
     }
 
@@ -149,19 +151,21 @@ public class MainActivity extends Activity {
         int[] cards = {
                 R.id.card_guide,
                 R.id.card_github,
-                R.id.card_blog,
-                R.id.card_update
+                R.id.card_blog
         };
         String[] urls = {
                 "https://yixiangren.top/463187456",
                 repoUrl,
-                "https://yixiangren.top",
-                repoUrl + "/releases/latest"
+                "https://yixiangren.top"
         };
         for (int i = 0; i < cards.length; i++) {
             final String url = urls[i];
             findViewById(cards[i]).setOnClickListener(v -> openUrl(url));
         }
+    }
+
+    private void bindUpdateCheck() {
+        findViewById(R.id.card_update).setOnClickListener(v -> manualCheckUpdate());
     }
 
     private void openUrl(String url) {
@@ -171,11 +175,31 @@ public class MainActivity extends Activity {
         }
     }
 
-    /** 启动时异步检查更新，有新版则弹窗。 */
+    /** 启动时异步检查更新，有新版则弹窗；无更新或失败则静默。 */
     private void checkUpdate() {
-        UpdateChecker.check(this, getVersionCode(), info -> {
+        UpdateChecker.check(this, getVersionCode(), (info, error) -> {
             if (info != null) {
                 showUpdateDialog(info);
+            }
+        });
+    }
+
+    /** 手动检查更新：弹"正在检查"进度，完成后提示最新或弹更新弹窗。 */
+    private void manualCheckUpdate() {
+        AlertDialog progress = new AlertDialog.Builder(this)
+                .setMessage(R.string.update_checking)
+                .setCancelable(false)
+                .create();
+        progress.show();
+
+        UpdateChecker.check(this, getVersionCode(), (info, error) -> {
+            progress.dismiss();
+            if (info != null) {
+                showUpdateDialog(info);
+            } else if (error) {
+                Toast.makeText(this, R.string.update_check_failed, Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, R.string.update_dialog_no_update, Toast.LENGTH_SHORT).show();
             }
         });
     }

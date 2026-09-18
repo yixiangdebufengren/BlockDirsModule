@@ -33,9 +33,13 @@ public final class UpdateChecker {
     private static final ExecutorService executor = Executors.newSingleThreadExecutor();
     private static final Handler mainHandler = new Handler(Looper.getMainLooper());
 
-    /** 检测回调：有更新时返回可展示的信息，否则传 null。 */
+    /** 检测回调。 */
     public interface Callback {
-        void onResult(UpdateInfo info);
+        /**
+         * @param info 有可用更新时非 null；无更新或失败时为 null
+         * @param error 是否因网络/解析失败导致无法判断
+         */
+        void onResult(UpdateInfo info, boolean error);
     }
 
     public static final class UpdateInfo {
@@ -60,15 +64,17 @@ public final class UpdateChecker {
         executor.execute(() -> {
             UpdateInfo info = fetchLatest();
             mainHandler.post(() -> {
-                if (info == null || info.versionCode <= currentVersionCode) {
-                    callback.onResult(null);
+                // 拉取失败（网络/解析异常），无法判断有无更新
+                if (info == null) {
+                    callback.onResult(null, true);
                     return;
                 }
-                if (isIgnored(context, info.versionCode)) {
-                    callback.onResult(null);
+                // 无更新（远端 <= 本机），或已被忽略
+                if (info.versionCode <= currentVersionCode || isIgnored(context, info.versionCode)) {
+                    callback.onResult(null, false);
                     return;
                 }
-                callback.onResult(info);
+                callback.onResult(info, false);
             });
         });
     }
