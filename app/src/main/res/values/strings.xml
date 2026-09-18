@@ -17,10 +17,6 @@
     <!-- 使用说明卡片 -->
     <string name="module_app_build_info_title">使用说明</string>
 
-    <!-- 原理卡片 -->
-    <string name="module_app_principle_title">原理</string>
-    <string name="module_app_principle_desc">Hook MediaProvider 进程内 libc 的 mkdir / mkdirat，检测到目标位于外置卷根目录第一层时直接返回成功，不真正创建目录。</string>
-
     <!-- 设置分区 -->
     <string name="setting_section_title">设置</string>
     <string name="setting_hide_icon_title">隐藏桌面图标</string>
@@ -36,6 +32,14 @@
     <string name="link_update_subtitle">前往 GitHub Releases 下载最新版本</string>
     <string name="link_blog_title">博客</string>
     <string name="link_blog_subtitle">yixiangren.top</string>
+
+    <!-- 更新检测弹窗 -->
+    <string name="update_dialog_title">发现新版本</string>
+    <string name="update_dialog_message">当前版本 v%1$d\n最新版本 v%2$d（%3$s）</string>
+    <string name="update_dialog_now">立即更新</string>
+    <string name="update_dialog_ignore">忽略本次</string>
+    <string name="update_dialog_later">稍后再说</string>
+    <string name="update_dialog_no_update">已是最新版本</string>
 
     <!-- 模块激活状态卡片 -->
     <string name="module_status_title_active">已激活</string>

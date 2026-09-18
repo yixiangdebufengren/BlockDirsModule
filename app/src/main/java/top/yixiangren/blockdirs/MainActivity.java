@@ -1,6 +1,7 @@
 package top.yixiangren.blockdirs;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -37,6 +38,7 @@ public class MainActivity extends Activity {
         bindLinks();
         bindHideIconSwitch();
         bindActivationStatus();
+        checkUpdate();
     }
 
     /**
@@ -167,6 +169,33 @@ public class MainActivity extends Activity {
             startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
         } catch (Exception ignored) {
         }
+    }
+
+    /** 启动时异步检查更新，有新版则弹窗。 */
+    private void checkUpdate() {
+        UpdateChecker.check(this, getVersionCode(), info -> {
+            if (info != null) {
+                showUpdateDialog(info);
+            }
+        });
+    }
+
+    /** 更新弹窗：立即更新 / 忽略本次 / 稍后再说。 */
+    private void showUpdateDialog(UpdateChecker.UpdateInfo info) {
+        String message = getString(R.string.update_dialog_message,
+                getVersionCode(), info.versionCode, info.versionName);
+
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.update_dialog_title)
+                .setMessage(message)
+                .setPositiveButton(R.string.update_dialog_now, (d, w) -> {
+                    String url = !info.releaseUrl.isEmpty() ? info.releaseUrl : info.downloadUrl;
+                    openUrl(url);
+                })
+                .setNeutralButton(R.string.update_dialog_ignore, (d, w) ->
+                        UpdateChecker.ignoreVersion(this, info.versionCode))
+                .setNegativeButton(R.string.update_dialog_later, null)
+                .show();
     }
 
     private String getVersionName() {

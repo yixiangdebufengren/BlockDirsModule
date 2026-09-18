@@ -131,33 +131,6 @@
                 android:textSize="13sp" />
         </LinearLayout>
 
-        <!-- 原理卡片 -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
-            android:orientation="vertical"
-            android:padding="18dp"
-            android:background="@drawable/card_bg">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/module_app_principle_title"
-                android:textColor="?attr/colorOnSurface"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:lineSpacingExtra="4dp"
-                android:text="@string/module_app_principle_desc"
-                android:textColor="?attr/colorOnSurfaceVariant"
-                android:textSize="13sp" />
-        </LinearLayout>
-
         <!-- 设置分组标题 -->
         <TextView
             android:layout_width="wrap_content"
