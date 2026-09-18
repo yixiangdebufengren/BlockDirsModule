@@ -2,14 +2,12 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_checked="true">
         <shape android:shape="rectangle">
-            <size android:width="52dp" android:height="32dp" />
             <corners android:radius="16dp" />
             <solid android:color="@color/color_icon" />
         </shape>
     </item>
     <item>
         <shape android:shape="rectangle">
-            <size android:width="52dp" android:height="32dp" />
             <corners android:radius="16dp" />
             <solid android:color="@color/switch_track_off" />
             <stroke android:width="2dp" android:color="@color/switch_stroke_off" />
