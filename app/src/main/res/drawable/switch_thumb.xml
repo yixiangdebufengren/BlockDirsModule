@@ -1,24 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- M3 风格 Switch 圆形 thumb：白色带轻微阴影 -->
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_checked="true">
-        <layer-list>
-            <item>
-                <shape android:shape="oval">
-                    <solid android:color="#FFFFFF" />
-                    <size android:width="24dp" android:height="24dp" />
-                </shape>
-            </item>
-        </layer-list>
+        <shape android:shape="oval">
+            <size android:width="24dp" android:height="24dp" />
+            <solid android:color="#FFFFFF" />
+        </shape>
     </item>
     <item>
-        <layer-list>
-            <item>
-                <shape android:shape="oval">
-                    <solid android:color="#FFFFFF" />
-                    <size android:width="24dp" android:height="24dp" />
-                </shape>
-            </item>
-        </layer-list>
+        <shape android:shape="oval">
+            <size android:width="24dp" android:height="24dp" />
+            <solid android:color="#FFFFFF" />
+        </shape>
     </item>
 </selector>
