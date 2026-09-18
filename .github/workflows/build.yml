@@ -47,10 +47,14 @@ jobs:
           VN="git+$(git rev-parse --short=8 HEAD)"
           TAG="${VC}-${VN}"
           MSG=$(git log -1 --pretty=%B)
-          echo "vc=$VC" >> "$GITHUB_OUTPUT"
-          echo "vn=$VN" >> "$GITHUB_OUTPUT"
-          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
-          echo "msg=$MSG" >> "$GITHUB_OUTPUT"
+          {
+            echo "vc=$VC"
+            echo "vn=$VN"
+            echo "tag=$TAG"
+            echo "msg<<EOF"
+            echo "$MSG"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
           echo "Version: code=$VC name=$VN tag=$TAG"
 
       - name: Remove old tag & release
@@ -97,9 +101,13 @@ jobs:
           VC=$(git rev-list --count HEAD)
           VN="git+$(git rev-parse --short=8 HEAD)"
           MSG=$(git log -1 --pretty=%B)
-          echo "tag=${VC}-${VN}" >> "$GITHUB_OUTPUT"
-          echo "name=${VN}" >> "$GITHUB_OUTPUT"
-          echo "msg=${MSG}" >> "$GITHUB_OUTPUT"
+          {
+            echo "tag=${VC}-${VN}"
+            echo "name=${VN}"
+            echo "msg<<EOF"
+            echo "$MSG"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
 
       - name: Download APK from source release
         run: |
