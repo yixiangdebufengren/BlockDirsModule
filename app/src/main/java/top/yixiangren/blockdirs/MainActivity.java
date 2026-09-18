@@ -46,7 +46,8 @@ public class MainActivity extends Activity {
     private void applyStatusBar() {
         Window window = getWindow();
         // 取动态取色后的 surface 色作为状态栏背景（与页面背景一致）
-        int surface = resolveThemeColor(android.R.attr.colorSurface);
+        // colorSurface 是 Material Components 定义的 attr，不是框架 android.R.attr
+        int surface = resolveThemeColor(com.google.android.material.R.attr.colorSurface);
         window.setStatusBarColor(surface);
         // 浅色背景 -> 深色前景图标，深色背景 -> 浅色前景图标
         boolean isLight = ColorUtils.calculateLuminance(surface) > 0.5;
