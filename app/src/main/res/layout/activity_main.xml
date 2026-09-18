@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/color_bg"
+    android:background="?attr/colorSurface"
     android:fillViewport="true"
     android:scrollbars="none">
 
@@ -26,7 +27,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/app_name"
-                android:textColor="@color/color_text_primary"
+                android:textColor="?attr/colorOnSurface"
                 android:textSize="32sp"
                 android:textStyle="bold"
                 android:letterSpacing="0.08" />
@@ -36,7 +37,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="@string/app_subtitle"
-                android:textColor="@color/color_text_secondary"
+                android:textColor="?attr/colorOnSurfaceVariant"
                 android:textSize="14sp"
                 android:letterSpacing="0.02" />
         </LinearLayout>
@@ -115,7 +116,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="14dp"
                     android:text="@string/module_app_build_info_title"
-                    android:textColor="@color/color_text_primary"
+                    android:textColor="?attr/colorOnSurface"
                     android:textSize="16sp"
                     android:textStyle="bold" />
             </LinearLayout>
@@ -126,7 +127,7 @@
                 android:layout_marginTop="12dp"
                 android:lineSpacingExtra="4dp"
                 android:text="@string/usage_tip"
-                android:textColor="@color/color_text_secondary"
+                android:textColor="?attr/colorOnSurfaceVariant"
                 android:textSize="13sp" />
         </LinearLayout>
 
@@ -143,7 +144,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/module_app_principle_title"
-                android:textColor="@color/color_text_primary"
+                android:textColor="?attr/colorOnSurface"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -153,7 +154,7 @@
                 android:layout_marginTop="10dp"
                 android:lineSpacingExtra="4dp"
                 android:text="@string/module_app_principle_desc"
-                android:textColor="@color/color_text_secondary"
+                android:textColor="?attr/colorOnSurfaceVariant"
                 android:textSize="13sp" />
         </LinearLayout>
 
@@ -164,7 +165,7 @@
             android:layout_marginTop="24dp"
             android:layout_marginBottom="10dp"
             android:text="@string/setting_section_title"
-            android:textColor="@color/color_text_tertiary"
+            android:textColor="?attr/colorOnSurfaceVariant"
             android:textSize="12sp"
             android:textStyle="bold"
             android:letterSpacing="0.05" />
@@ -188,7 +189,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/setting_hide_icon_title"
-                    android:textColor="@color/color_text_primary"
+                    android:textColor="?attr/colorOnSurface"
                     android:textSize="15sp"
                     android:textStyle="bold" />
 
@@ -197,7 +198,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
                     android:text="@string/setting_hide_icon_subtitle"
-                    android:textColor="@color/color_text_secondary"
+                    android:textColor="?attr/colorOnSurfaceVariant"
                     android:textSize="12sp" />
             </LinearLayout>
 
@@ -215,7 +216,7 @@
             android:layout_marginTop="24dp"
             android:layout_marginBottom="10dp"
             android:text="@string/link_section_title"
-            android:textColor="@color/color_text_tertiary"
+            android:textColor="?attr/colorOnSurfaceVariant"
             android:textSize="12sp"
             android:textStyle="bold"
             android:letterSpacing="0.05" />
@@ -249,7 +250,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/link_github_title"
-                    android:textColor="@color/color_text_primary"
+                    android:textColor="?attr/colorOnSurface"
                     android:textSize="15sp"
                     android:textStyle="bold" />
 
@@ -258,7 +259,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
                     android:text="@string/link_github_subtitle"
-                    android:textColor="@color/color_text_secondary"
+                    android:textColor="?attr/colorOnSurfaceVariant"
                     android:textSize="12sp" />
             </LinearLayout>
         </LinearLayout>
@@ -293,7 +294,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/link_blog_title"
-                    android:textColor="@color/color_text_primary"
+                    android:textColor="?attr/colorOnSurface"
                     android:textSize="15sp"
                     android:textStyle="bold" />
 
@@ -302,7 +303,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
                     android:text="@string/link_blog_subtitle"
-                    android:textColor="@color/color_text_secondary"
+                    android:textColor="?attr/colorOnSurfaceVariant"
                     android:textSize="12sp" />
             </LinearLayout>
         </LinearLayout>
@@ -315,7 +316,7 @@
             android:layout_marginTop="36dp"
             android:gravity="center"
             android:text="@string/version_footer"
-            android:textColor="@color/color_text_tertiary"
+            android:textColor="?attr/colorOnSurfaceVariant"
             android:textSize="12sp" />
 
     </LinearLayout>
