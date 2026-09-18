@@ -7,7 +7,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.widget.Switch;
+import android.widget.ToggleButton;
 import android.widget.TextView;
 
 /**
@@ -30,7 +30,7 @@ public class MainActivity extends Activity {
 
     /** 绑定「隐藏桌面图标」开关：切换 activity-alias 的 enabled 状态 */
     private void bindHideIconSwitch() {
-        Switch sw = findViewById(R.id.switch_hide_icon);
+        ToggleButton sw = findViewById(R.id.switch_hide_icon);
         if (sw == null) return;
 
         boolean hidden = isIconHidden();
