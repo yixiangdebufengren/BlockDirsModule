@@ -164,7 +164,7 @@
                 android:thumb="@drawable/switch_thumb"
                 android:track="@drawable/switch_track"
                 android:showText="false"
-                android:switchMinWidth="52dp" />
+                android:switchMinWidth="56dp" />
         </LinearLayout>
 
         <!-- 链接分组标题 -->
